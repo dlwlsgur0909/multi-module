@@ -1,0 +1,8 @@
+spring:
+  jwt:
+    secret: ENC(yh5fx3J9NObhujCD6gkDPeHK/8D8ErL0FWhMUN0t8/OGbkvGdP887yp+JwTFxY5I5IZYKDZB0VrfbIO3dpmUUUL8uEnBI8ax4luax0uWUI8=)
+    access-timeout: 180
+    refresh-timeout: 60
+
+server:
+  port: 9000
