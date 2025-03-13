@@ -8,6 +8,7 @@ import com.example.dto.response.LoginResponse;
 import com.example.jwt.JwtUtil;
 import com.example.jwt.TokenInfo;
 import com.example.repository.MemberRepository;
+import com.example.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,40 +22,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    private final CustomPasswordEncoder passwordEncoder;
-    private final MemberRepository memberRepository;
-
-    private final JwtUtil jwtUtil;
+    private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-
-        Member findMember = memberRepository.findByEmail(loginRequest.getEmail())
-                .orElseThrow(() -> new RuntimeException(loginRequest.getEmail() + "에 해당하는 Member를 찾을 수 없습니다"));
-
-        if(!passwordEncoder.matches(loginRequest.getPassword(), findMember.getPassword())) {
-            throw new RuntimeException("로그인 실패");
-        }
-
-        LoginResponse loginResponse = new LoginResponse(findMember);
-        String accessToken = jwtUtil.createAccessToken(loginResponse);
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
 
         return ResponseEntity
                 .ok()
-                .body(accessToken);
+                .body(authService.login(request));
     }
 
     @PostMapping("/join")
-    public ResponseEntity<?> join(@RequestBody JoinRequest joinRequest) {
+    public ResponseEntity<?> join(@RequestBody JoinRequest request) {
 
-        String encodedPassword = passwordEncoder.encode(joinRequest.getPassword());
-        joinRequest.encodePassword(encodedPassword);
-
-        if(memberRepository.existsByEmail(joinRequest.getEmail())) {
-            throw new RuntimeException("이미 가입된 이메일입니다.");
-        }
-
-        memberRepository.save(joinRequest.toEntity());
+        authService.join(request);
 
         return ResponseEntity
                 .ok()
