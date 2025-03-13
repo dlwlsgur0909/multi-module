@@ -34,12 +34,12 @@ public class JwtUtil {
     }
 
     // Access 토큰 생성
-    public String createAccessToken(TokenInfo tokenInfo) {
+    public String createAccessToken(TokenInterface tokenInfo) {
         return createJwt(tokenInfo, accessTimeout * 60 * 1000L);
     }
 
     // Refresh 토큰 생성
-    public String createRefreshToken(TokenInfo tokenInfo) {
+    public String createRefreshToken(TokenInterface tokenInfo) {
         return createJwt(tokenInfo, refreshTimeout * 60 * 1000L);
     }
 
@@ -67,7 +67,7 @@ public class JwtUtil {
     }
 
     // 토큰 정보 추출
-    public TokenInfo parseToken(String token) {
+    public TokenInterface parseToken(String token) {
 
         LinkedHashMap<?, ?> tokenInfo = Jwts.parser()
                 .verifyWith(secretKey)
@@ -82,10 +82,10 @@ public class JwtUtil {
     }
 
     // Jwt 토큰 생성
-    private String createJwt(TokenInfo tokenInfo, Long expiration) {
+    private String createJwt(TokenInterface tokenInfo, Long expiration) {
 
         return Jwts.builder()
-                .claim("token", tokenInfo)
+                .claim("tokenInfo", tokenInfo)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(secretKey)

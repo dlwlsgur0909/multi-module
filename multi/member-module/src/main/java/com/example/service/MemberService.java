@@ -50,10 +50,4 @@ public class MemberService {
         memberRepository.deleteById(id);
     }
 
-    // Email로 Member 조회
-    public Member findByEmail(final String email) {
-        return memberRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException(email + "에 해당하는 Member를 찾을 수 없습니다"));
-    }
-
 }

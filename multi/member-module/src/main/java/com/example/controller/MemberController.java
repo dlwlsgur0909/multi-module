@@ -58,24 +58,4 @@ public class MemberController {
                 .build();
     }
 
-    /* Security 모듈에서 호출하는 API */
-
-    @GetMapping("/auth/email")
-    public ResponseEntity<?> findByEmail(@RequestParam String email) {
-
-        return ResponseEntity
-                .ok()
-                .body(memberService.findByEmail(email));
-    }
-
-    @PostMapping("/auth/join")
-    public ResponseEntity<?> joinMember(@RequestBody Member member) {
-
-        memberService.saveMember(member);
-
-        return ResponseEntity
-                .ok()
-                .build();
-    }
-
 }
