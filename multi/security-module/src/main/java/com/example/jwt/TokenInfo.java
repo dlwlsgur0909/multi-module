@@ -1,5 +1,6 @@
 package com.example.jwt;
 
+import com.example.enumeration.Role;
 import lombok.*;
 
 @Getter @ToString
@@ -11,5 +12,6 @@ public class TokenInfo {
     private Long id;
     private String nickname;
     private String email;
+    private Role role;
 
 }
