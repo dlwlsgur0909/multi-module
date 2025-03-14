@@ -6,7 +6,6 @@ import com.example.dto.request.JoinRequest;
 import com.example.dto.request.LoginRequest;
 import com.example.dto.response.LoginResponse;
 import com.example.jwt.JwtUtil;
-import com.example.jwt.TokenInfo;
 import com.example.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +20,7 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final JwtUtil jwtUtil;
 
+    // 로그인
     public LoginResponse login(final LoginRequest request) {
 
         Member findMember = memberRepository.findByEmail(request.getEmail())
@@ -35,6 +35,7 @@ public class AuthService {
         return new LoginResponse(findMember, accessToken);
     }
 
+    // 회원가입
     @Transactional
     public void join(final JoinRequest request) {
         String encodedPassword = passwordEncoder.encode(request.getPassword());

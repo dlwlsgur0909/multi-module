@@ -24,6 +24,7 @@ public class AuthController {
 
     private final AuthService authService;
 
+    // 로그인
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
 
@@ -32,6 +33,7 @@ public class AuthController {
                 .body(authService.login(request));
     }
 
+    // 회원가입
     @PostMapping("/join")
     public ResponseEntity<?> join(@RequestBody JoinRequest request) {
 
