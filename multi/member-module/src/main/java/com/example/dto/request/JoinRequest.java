@@ -1,5 +1,7 @@
 package com.example.dto.request;
 
+import com.example.domain.Member;
+import com.example.enumeration.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,5 +19,15 @@ public class JoinRequest {
 
     public void encodePassword(String encodedPassword) {
         this.password = encodedPassword;
+    }
+
+    public Member toEntity() {
+
+        return Member.builder()
+                .nickname(nickname)
+                .email(email)
+                .password(password)
+                .role(Role.MEMBER)
+                .build();
     }
 }

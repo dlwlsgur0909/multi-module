@@ -45,11 +45,8 @@ public class JwtFilter extends OncePerRequestFilter {
         // 토큰 파싱
         TokenInfo parsedTokenInfo = jwtUtil.parseToken(accessToken);
 
-//        List<SimpleGrantedAuthority> authorityList = parsedTokenInfo.getRoleTypeList().stream()
-//                .map(roleType -> new SimpleGrantedAuthority(roleType.name()))
-//                .toList();
-//        Authentication authentication = new UsernamePasswordAuthenticationToken(parsedTokenInfo, null, authorityList);
-        Authentication authentication = new UsernamePasswordAuthenticationToken(parsedTokenInfo, null, Collections.emptyList());
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(parsedTokenInfo.getRole().name());
+        Authentication authentication = new UsernamePasswordAuthenticationToken(parsedTokenInfo, null, List.of(authority));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 

@@ -74,7 +74,7 @@ public class JwtUtil {
                 .build()
                 .parseSignedClaims(token)
                 .getPayload()
-                .get("token", LinkedHashMap.class);
+                .get("tokenInfo", LinkedHashMap.class);
 
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -85,7 +85,7 @@ public class JwtUtil {
     private String createJwt(TokenInfo tokenInfo, Long expiration) {
 
         return Jwts.builder()
-                .claim("token", tokenInfo)
+                .claim("tokenInfo", tokenInfo)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(secretKey)
