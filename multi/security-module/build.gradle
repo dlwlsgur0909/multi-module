@@ -13,7 +13,7 @@ dependencies {
 
     implementation project(':core-util')
 
-    api 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.2'
     implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
