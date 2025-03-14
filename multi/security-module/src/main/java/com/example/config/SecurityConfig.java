@@ -1,5 +1,6 @@
 package com.example.config;
 
+import com.example.enumeration.Role;
 import com.example.jwt.JwtFilter;
 import com.example.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -54,6 +55,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> {
                     request
                             .requestMatchers("/api/auth/**").permitAll()
+                            .requestMatchers("/api/members/**").hasAuthority(Role.MEMBER.name())
                             .anyRequest().authenticated();
                 })
                 .addFilterBefore(new JwtFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
