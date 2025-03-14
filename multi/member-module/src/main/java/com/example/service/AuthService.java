@@ -6,6 +6,7 @@ import com.example.dto.request.JoinRequest;
 import com.example.dto.request.LoginRequest;
 import com.example.dto.response.LoginResponse;
 import com.example.jwt.JwtUtil;
+import com.example.jwt.TokenInfo;
 import com.example.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final JwtUtil jwtUtil;
 
-    public String login(final LoginRequest request) {
+    public LoginResponse login(final LoginRequest request) {
 
         Member findMember = memberRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException(request.getEmail() + "에 해당하는 Member를 찾을 수 없습니다"));
@@ -29,9 +30,9 @@ public class AuthService {
             throw new RuntimeException("로그인 실패");
         }
 
-        LoginResponse loginResponse = new LoginResponse(findMember);
+        String accessToken = jwtUtil.createAccessToken(findMember.toTokenInfo());
 
-        return jwtUtil.createAccessToken(loginResponse);
+        return new LoginResponse(findMember, accessToken);
     }
 
     @Transactional

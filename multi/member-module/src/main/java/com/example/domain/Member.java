@@ -1,5 +1,6 @@
 package com.example.domain;
 
+import com.example.jwt.TokenInfo;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,5 +28,15 @@ public class Member {
 
     public void update(Member member) {
         this.nickname = member.nickname;
+    }
+
+    // 토큰 생성
+    public TokenInfo toTokenInfo() {
+
+        return TokenInfo.builder()
+                .id(id)
+                .nickname(nickname)
+                .email(email)
+                .build();
     }
 }
