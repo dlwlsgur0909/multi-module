@@ -15,17 +15,6 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    // Member 저장
-    @Transactional
-    public void saveMember(Member member) {
-
-        if(memberRepository.existsByEmail(member.getEmail())) {
-            throw new RuntimeException("이미 가입된 이메일입니다.");
-        }
-
-        memberRepository.save(member);
-    }
-
     // Member 단건 조회
     public Member findMember(Long id) {
         return memberRepository.findById(id)

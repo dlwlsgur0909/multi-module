@@ -13,16 +13,7 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @PostMapping
-    public ResponseEntity<?> saveMember(@RequestBody Member member) {
-
-        memberService.saveMember(member);
-
-        return ResponseEntity
-                .ok()
-                .build();
-    }
-
+    // Member 단건 조회
     @GetMapping("/{id}")
     public ResponseEntity<?> findMember(@PathVariable Long id) {
 
@@ -31,6 +22,7 @@ public class MemberController {
                 .body(memberService.findMember(id));
     }
 
+    // Member 전체 조회
     @GetMapping
     public ResponseEntity<?> findAllMember() {
 
@@ -39,6 +31,7 @@ public class MemberController {
                 .body(memberService.findAllMember());
     }
 
+    // Member 수정
     @PutMapping("/{id}")
     public ResponseEntity<?> updateMember(@PathVariable Long id,
                                           @RequestBody Member member) {
@@ -50,8 +43,11 @@ public class MemberController {
                 .build();
     }
 
+    // Member 삭제
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteMember(@PathVariable Long id) {
+
+        memberService.deleteMember(id);
 
         return ResponseEntity
                 .ok()
