@@ -43,7 +43,7 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         // 토큰 파싱
-        TokenInterface parsedTokenInfo = jwtUtil.parseToken(accessToken);
+        TokenInfo parsedTokenInfo = jwtUtil.parseToken(accessToken);
 
 //        List<SimpleGrantedAuthority> authorityList = parsedTokenInfo.getRoleTypeList().stream()
 //                .map(roleType -> new SimpleGrantedAuthority(roleType.name()))

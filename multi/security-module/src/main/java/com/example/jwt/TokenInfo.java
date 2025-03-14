@@ -1,15 +1,12 @@
 package com.example.jwt;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Getter
+@Getter @ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TokenInfo implements TokenInterface {
+public class TokenInfo {
 
     private Long id;
     private String nickname;

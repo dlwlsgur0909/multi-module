@@ -34,12 +34,12 @@ public class JwtUtil {
     }
 
     // Access 토큰 생성
-    public String createAccessToken(TokenInterface tokenInfo) {
+    public String createAccessToken(TokenInfo tokenInfo) {
         return createJwt(tokenInfo, accessTimeout * 60 * 1000L);
     }
 
     // Refresh 토큰 생성
-    public String createRefreshToken(TokenInterface tokenInfo) {
+    public String createRefreshToken(TokenInfo tokenInfo) {
         return createJwt(tokenInfo, refreshTimeout * 60 * 1000L);
     }
 
@@ -67,14 +67,14 @@ public class JwtUtil {
     }
 
     // 토큰 정보 추출
-    public TokenInterface parseToken(String token) {
+    public TokenInfo parseToken(String token) {
 
         LinkedHashMap<?, ?> tokenInfo = Jwts.parser()
                 .verifyWith(secretKey)
                 .build()
                 .parseSignedClaims(token)
                 .getPayload()
-                .get("token", LinkedHashMap.class);
+                .get("tokenInfo", LinkedHashMap.class);
 
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -82,7 +82,7 @@ public class JwtUtil {
     }
 
     // Jwt 토큰 생성
-    private String createJwt(TokenInterface tokenInfo, Long expiration) {
+    private String createJwt(TokenInfo tokenInfo, Long expiration) {
 
         return Jwts.builder()
                 .claim("tokenInfo", tokenInfo)
