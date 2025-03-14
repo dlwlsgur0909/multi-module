@@ -1,7 +1,6 @@
 package com.example.dto.response;
 
 import com.example.domain.Member;
-import com.example.jwt.TokenInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

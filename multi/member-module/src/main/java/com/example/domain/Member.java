@@ -1,5 +1,6 @@
 package com.example.domain;
 
+import com.example.enumeration.Role;
 import com.example.jwt.TokenInfo;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -26,6 +27,10 @@ public class Member {
     @Column(name = "member_password")
     private String password;
 
+    @Column(name = "member_role")
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     public void update(Member member) {
         this.nickname = member.nickname;
     }
@@ -37,6 +42,7 @@ public class Member {
                 .id(id)
                 .nickname(nickname)
                 .email(email)
+                .role(role)
                 .build();
     }
 }
