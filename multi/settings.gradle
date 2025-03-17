@@ -2,4 +2,5 @@ rootProject.name = 'multi'
 include 'core-util'
 include 'member-module'
 include 'security-module'
+include 'eureka-server'
 
