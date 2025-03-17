@@ -5,9 +5,6 @@ plugins {
 	id 'io.spring.dependency-management' version '1.1.7'
 }
 
-group = 'com.example'
-version = '0.0.1-SNAPSHOT'
-
 //bootJar {
 //	enabled = false
 //}
@@ -15,12 +12,6 @@ version = '0.0.1-SNAPSHOT'
 //jar {
 //	enabled = true
 //}
-
-java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(21)
-	}
-}
 
 allprojects {
 	group = 'com.example'
@@ -36,7 +27,7 @@ allprojects {
 
 subprojects {
 	apply plugin: 'java'
-	apply plugin: 'java-library'
+//	apply plugin: 'java-library'
 	apply plugin: 'org.springframework.boot'
 	apply plugin: 'io.spring.dependency-management'
 
@@ -45,7 +36,7 @@ subprojects {
 
 		testImplementation 'org.springframework.boot:spring-boot-starter-test'
 		testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2'
-		testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+//		testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
 		compileOnly 'org.projectlombok:lombok'
 		annotationProcessor 'org.projectlombok:lombok'
@@ -57,17 +48,3 @@ subprojects {
 		}
 	}
 }
-
-tasks.named('test') {
-	useJUnitPlatform()
-	testFramework {
-		useJUnit()
-	}
-}
-
-//test {
-//	useJUnitPlatform()
-//	testFramework {
-//		useJUnit()
-//	}
-//}
