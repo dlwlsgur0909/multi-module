@@ -4,4 +4,5 @@ include 'member-module'
 include 'security-module'
 include 'eureka-server'
 include 'board-module'
+include 'api-gateway'
 
