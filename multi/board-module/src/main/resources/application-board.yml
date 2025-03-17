@@ -1,9 +1,9 @@
 spring:
   application:
-    name: member-module
+    name: board-module
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ENC(t2jVUJ+5W0DbA2Ko8cWh9G61FK/Jgwu5DLQkFmYwZZQs+HWw5SDZ8PCJpatQTkVnkLL2e/+S/SttmLGG+NuF2lvMhDIbEeh5bU4JCvT0Bcg=)
+    url: ENC(j7cTSdM3a5jchC2ncE9VNF/Wf9jza2+qYe1tODF681XaKrfxKN++xy0Ne6A+acCtFiKvIQ3/f7YiKWaLJe5Eirv4w1JcxWX/DqF+dy5xC0w=)
     username: ENC(86CZQaxJSD+CAWmxK7Y2Zld0TC0bnYw+4AfxJm1bS/EuHyNt5WSXuZG/D1TpRT2C)
     password: ENC(CZRbXSjDGeFks0HzOZ2/MeErxZ7KVzZmt0pYpXSUruIVmU13Cko+6K6w2Jt+MDhW)
   jpa:
@@ -12,7 +12,7 @@ spring:
       show-sql: true
 
 server:
-  port: 9100
+  port: 9200
 
 eureka:
   client:
