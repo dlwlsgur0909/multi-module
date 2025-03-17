@@ -35,25 +35,30 @@ class JasyptConfigTest {
     void dbInfoEncodeTest() {
 
         // given
-        String url = "jdbc:mysql://localhost:3306/member_module";
+        String memberUrl = "jdbc:mysql://localhost:3306/member_module";
+        String boardUrl = "jdbc:mysql://localhost:3306/board_module";
         String username = "root";
         String password = "admin";
 
         // when
-        String encryptedUrl = encryptor.encrypt(url);
+        String encryptedMemberUrl = encryptor.encrypt(memberUrl);
+        String encryptedBoardUrl = encryptor.encrypt(boardUrl);
         String encryptedUsername = encryptor.encrypt(username);
         String encryptedPassword = encryptor.encrypt(password);
 
-        String decryptedUrl = encryptor.decrypt(encryptedUrl);
+        String decryptedMemberUrl = encryptor.decrypt(encryptedMemberUrl);
+        String decryptedBoardUrl = encryptor.decrypt(encryptedBoardUrl);
         String decryptedUsername = encryptor.decrypt(encryptedUsername);
         String decryptedPassword = encryptor.decrypt(encryptedPassword);
 
         // then
-        System.out.println("encryptedUrl = " + encryptedUrl);
+        System.out.println("encryptedMemberUrl = " + encryptedMemberUrl);
+        System.out.println("encryptedBoardUrl = " + encryptedBoardUrl);
         System.out.println("encryptedUsername = " + encryptedUsername);
         System.out.println("encryptedPassword = " + encryptedPassword);
 
-        System.out.println("decryptedUrl = " + decryptedUrl);
+        System.out.println("decryptedMemberUrl = " + decryptedMemberUrl);
+        System.out.println("decryptedBoardUrl = " + decryptedBoardUrl);
         System.out.println("decryptedUsername = " + decryptedUsername);
         System.out.println("decryptedPassword = " + decryptedPassword);
 
