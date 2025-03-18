@@ -1,7 +1,7 @@
 package com.example.controller;
 
 import com.example.annotation.CurrentMember;
-import com.example.dto.BoardSaveRequest;
+import com.example.dto.request.BoardSaveRequest;
 import com.example.jwt.TokenInfo;
 import com.example.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -36,10 +36,10 @@ public class BoardController {
 
     // 게시글 전체 조회
     @GetMapping
-    public ResponseEntity<?> findAllBoard() {
+    public ResponseEntity<?> findAllBoard(@CurrentMember TokenInfo tokenInfo) {
 
         return ResponseEntity
-                .ok(boardService.findAllBoard());
+                .ok(boardService.findAllBoard(tokenInfo));
     }
 
 }
