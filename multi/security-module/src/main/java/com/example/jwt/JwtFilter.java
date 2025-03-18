@@ -45,6 +45,9 @@ public class JwtFilter extends OncePerRequestFilter {
         // 토큰 파싱
         TokenInfo parsedTokenInfo = jwtUtil.parseToken(accessToken);
 
+        // 토큰 정보에 JWT 추가
+        parsedTokenInfo.setAccessToken(accessToken);
+
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(parsedTokenInfo.getRole().name());
         Authentication authentication = new UsernamePasswordAuthenticationToken(parsedTokenInfo, null, List.of(authority));
 

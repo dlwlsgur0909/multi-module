@@ -1,4 +1,4 @@
-package com.example.dto;
+package com.example.dto.request;
 
 import com.example.domain.Board;
 import lombok.AllArgsConstructor;

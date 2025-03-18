@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/members")
@@ -29,6 +31,14 @@ public class MemberController {
         return ResponseEntity
                 .ok()
                 .body(memberService.findAllMember());
+    }
+
+    // Member Id 목록으로 조회
+    @GetMapping("/idList")
+    public ResponseEntity<?> findAllMemberByIdList(@RequestParam List<Long> memberIdList) {
+
+        return ResponseEntity
+                .ok(memberService.findAllMemberByIdList(memberIdList));
     }
 
     // Member 수정
