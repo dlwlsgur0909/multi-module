@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.domain.Member;
+import com.example.dto.response.MemberInfoResponse;
 import com.example.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,15 @@ public class MemberService {
     // Member 전체 조회
     public List<Member> findAllMember() {
         return memberRepository.findAll();
+    }
+
+    // Member Id 목록으로 조회
+    public List<MemberInfoResponse> findAllMemberByIdList(final List<Long> memberIdList) {
+
+        return memberRepository.findAllByIdList(memberIdList)
+                .stream()
+                .map(MemberInfoResponse::new)
+                .toList();
     }
 
     // Member 수정
