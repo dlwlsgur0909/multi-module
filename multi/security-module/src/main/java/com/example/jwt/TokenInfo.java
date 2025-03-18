@@ -13,5 +13,10 @@ public class TokenInfo {
     private String nickname;
     private String email;
     private Role role;
+    private String accessToken;
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
 
 }
