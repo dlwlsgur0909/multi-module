@@ -1,31 +1,29 @@
 package com.example.config;
 
-import com.example.enumeration.ServiceInfo;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestClient;
+
+import java.time.Duration;
 
 @Configuration
 @RequiredArgsConstructor
 public class RestClientConfig {
 
     @Bean
-    public RestClient memberRestClient() {
+    public RestClient restClient() {
+
+        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+        requestFactory.setConnectTimeout(Duration.ofSeconds(10));
+        requestFactory.setReadTimeout(Duration.ofSeconds(10));
 
         return RestClient.builder()
-                .baseUrl(ServiceInfo.MEMBER_MODULE.getBaseUrl())
+                .requestFactory(requestFactory)
                 .build();
     }
 
-    @Bean
-    public RestClient boardRestClient() {
-
-        return RestClient.builder()
-                .baseUrl(ServiceInfo.BOARD_MODULE.getBaseUrl())
-                .build();
-    }
 
 
 }
