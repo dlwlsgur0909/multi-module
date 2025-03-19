@@ -3,7 +3,7 @@ package com.example.enumeration;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public enum ServiceInfo {
+public enum ServiceUrl {
 
     MEMBER_MODULE("http", "localhost", "9100"),
     BOARD_MODULE("http", "localhost", "9200")
