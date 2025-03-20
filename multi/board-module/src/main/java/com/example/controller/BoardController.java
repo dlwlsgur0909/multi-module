@@ -28,10 +28,10 @@ public class BoardController {
 
     // 게시글 단건 조회
     @GetMapping("/{boardId}")
-    public ResponseEntity<?> findBoard(@PathVariable Long boardId) {
+    public ResponseEntity<?> findBoard(@CurrentMember TokenInfo tokenInfo, @PathVariable Long boardId) {
 
         return ResponseEntity
-                .ok(boardService.findBoard(boardId));
+                .ok(boardService.findBoard(tokenInfo, boardId));
     }
 
     // 게시글 전체 조회

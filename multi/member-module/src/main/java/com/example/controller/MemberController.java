@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.domain.Member;
+import com.example.dto.response.MemberInfoResponse;
 import com.example.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -33,14 +34,6 @@ public class MemberController {
                 .body(memberService.findAllMember());
     }
 
-    // Member Id 목록으로 조회
-    @GetMapping("/idList")
-    public ResponseEntity<?> findAllMemberByIdList(@RequestParam List<Long> memberIdList) {
-
-        return ResponseEntity
-                .ok(memberService.findAllMemberByIdList(memberIdList));
-    }
-
     // Member 수정
     @PutMapping("/{id}")
     public ResponseEntity<?> updateMember(@PathVariable Long id,
@@ -62,6 +55,24 @@ public class MemberController {
         return ResponseEntity
                 .ok()
                 .build();
+    }
+
+    /* Board-Module에서 호출하는 API */
+
+    // Member Id 목록으로 조회
+    @GetMapping("/idList")
+    public ResponseEntity<?> findAllMemberByIdList(@RequestParam List<Long> memberIdList) {
+
+        return ResponseEntity
+                .ok(memberService.findAllMemberByIdList(memberIdList));
+    }
+
+    // 작성자 정보 조회
+    @GetMapping("/{id}/board")
+    public ResponseEntity<?> findMemberForBoard(@PathVariable Long id) {
+
+        return ResponseEntity
+                .ok(memberService.findMemberForBoard(id));
     }
 
 }
