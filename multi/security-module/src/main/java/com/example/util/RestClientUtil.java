@@ -11,6 +11,7 @@ import org.springframework.web.client.RestClient;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -18,52 +19,19 @@ public class RestClientUtil {
 
     private final RestClient restClient;
 
-    public <T> T getMono(ServiceUrl serviceUrl, String path,
-                         @Nullable Map<String, String> queryParams,
-                         @Nullable Map<String, String> headers,
+    public <T> T getMono(UrlRequest urlRequest,
                          Class<T> responseClass) {
 
         RestClient client = restClient.mutate()
-                .baseUrl(serviceUrl.getBaseUrl())
+                .baseUrl(urlRequest.getServiceUrl().getBaseUrl())
                 .build();
 
         return client.get()
                 .uri(uriBuilder -> {
-                    uriBuilder.path(path);
-                    if(queryParams != null) {
-                        queryParams.forEach(uriBuilder::queryParam);
-                    }
+                    uriBuilder.path(urlRequest.getPath());
 
-                    return uriBuilder.build();
-                })
-                .headers(httpHeaders ->  {
-                    if(headers != null) {
-                        headers.forEach(httpHeaders::set);
-                    }
-                })
-                .exchange((request, response) -> {
-                    if(!response.getStatusCode().isSameCodeAs(HttpStatus.OK)) {
-                        throw new RuntimeException(serviceUrl.getBaseUrl() + path +"에 대한 요청에 실패했습니다");
-                    }
-
-                    return response.bodyTo(responseClass);
-                });
-    }
-
-    public <T> List<T> getFlux(ServiceUrl serviceUrl, String path,
-                               @Nullable Map<String, Object> queryParams,
-                               @Nullable Map<String, String> headers,
-                               Class<T> responseClass) {
-
-        RestClient client = restClient.mutate()
-                .baseUrl(serviceUrl.getBaseUrl())
-                .build();
-
-        return client.get()
-                .uri(uriBuilder -> {
-                    uriBuilder.path(path);
-                    if(queryParams != null) {
-                        queryParams.forEach((key, value) -> {
+                    if(urlRequest.getQueryParams() != null) {
+                        urlRequest.getQueryParams().forEach((key, value) -> {
 
                             if(value instanceof List<?> list) {
                                 list.forEach(item -> {
@@ -78,13 +46,52 @@ public class RestClientUtil {
                     return uriBuilder.build();
                 })
                 .headers(httpHeaders ->  {
-                    if(headers != null) {
-                        headers.forEach(httpHeaders::set);
+                    if(urlRequest.getHeaders() != null) {
+                        urlRequest.getHeaders().forEach(httpHeaders::set);
                     }
                 })
                 .exchange((request, response) -> {
                     if(!response.getStatusCode().isSameCodeAs(HttpStatus.OK)) {
-                        throw new RuntimeException(serviceUrl.getBaseUrl() + path +"에 대한 요청에 실패했습니다");
+                        throw new RuntimeException(urlRequest.getServiceUrl().getBaseUrl() + urlRequest.getPath() +"에 대한 요청에 실패했습니다");
+                    }
+
+                    return response.bodyTo(responseClass);
+                });
+    }
+
+    public <T> List<T> getFlux(UrlRequest urlRequest,
+                               Class<T> responseClass) {
+
+        RestClient client = restClient.mutate()
+                .baseUrl(urlRequest.getServiceUrl().getBaseUrl())
+                .build();
+
+        return client.get()
+                .uri(uriBuilder -> {
+                    uriBuilder.path(urlRequest.getPath());
+                    if(urlRequest.getQueryParams() != null) {
+                        urlRequest.getQueryParams().forEach((key, value) -> {
+
+                            if(value instanceof List<?> list) {
+                                list.forEach(item -> {
+                                    uriBuilder.queryParam(key, item);
+                                });
+                            }else {
+                                uriBuilder.queryParam(key, value);
+                            }
+                        });
+                    }
+
+                    return uriBuilder.build();
+                })
+                .headers(httpHeaders ->  {
+                    if(urlRequest.getHeaders() != null) {
+                        urlRequest.getHeaders().forEach(httpHeaders::set);
+                    }
+                })
+                .exchange((request, response) -> {
+                    if(!response.getStatusCode().isSameCodeAs(HttpStatus.OK)) {
+                        throw new RuntimeException(urlRequest.getServiceUrl().getBaseUrl() + urlRequest.getPath() +"에 대한 요청에 실패했습니다");
                     }
 
                     ObjectMapper objectMapper = new ObjectMapper();
