@@ -18,6 +18,7 @@ public class MemberService {
 
     // Member 단건 조회
     public Member findMember(Long id) {
+
         return memberRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException(id + "에 해당하는 Member를 찾을 수 없습니다"));
     }
@@ -26,6 +27,23 @@ public class MemberService {
     public List<Member> findAllMember() {
         return memberRepository.findAll();
     }
+
+    // Member 수정
+    @Transactional
+    public void updateMember(Long id, Member member) {
+        Member findMember = memberRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException(id + "에 해당하는 Member를 찾을 수 없습니다"));
+
+        findMember.update(member);
+    }
+
+    // Member 삭제
+    @Transactional
+    public void deleteMember(Long id) {
+        memberRepository.deleteById(id);
+    }
+
+    /* Board-Module에서 호출하는 API */
 
     // Member Id 목록으로 조회
     public List<MemberInfoResponse> findAllMemberByIdList(final List<Long> memberIdList) {
@@ -36,17 +54,13 @@ public class MemberService {
                 .toList();
     }
 
-    // Member 수정
-    public void updateMember(Long id, Member member) {
+    // 작성자 정보 조회
+    public MemberInfoResponse findMemberForBoard(Long id) {
+
         Member findMember = memberRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException(id + "에 해당하는 Member를 찾을 수 없습니다"));
 
-        findMember.update(member);
-    }
-
-    // Member 삭제
-    public void deleteMember(Long id) {
-        memberRepository.deleteById(id);
+        return new MemberInfoResponse(findMember);
     }
 
 }
