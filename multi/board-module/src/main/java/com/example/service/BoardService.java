@@ -4,18 +4,19 @@ import com.example.domain.Board;
 import com.example.dto.request.BoardSaveRequest;
 import com.example.dto.response.BoardResponse;
 import com.example.dto.response.MemberInfoResponse;
+import com.example.enumeration.ServiceUrl;
 import com.example.jwt.TokenInfo;
 import com.example.repository.BoardRepository;
-import jakarta.ws.rs.InternalServerErrorException;
+import com.example.util.RestClientUtil;
+import com.example.util.UrlRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestClient;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +25,7 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
 
-    private final RestClient memberRestClient;
+    private final RestClientUtil restClientUtil;
 
     // 게시글 저장
     @Transactional
@@ -34,10 +35,27 @@ public class BoardService {
     }
 
     // 게시글 단건 조회
-    public Board findBoard(final Long boardId) {
+    public BoardResponse findBoard(final TokenInfo tokenInfo, final Long boardId) {
 
-        return boardRepository.findById(boardId)
+        Board findBoard = boardRepository.findById(boardId)
                 .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다"));
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccessToken());
+
+        UrlRequest urlRequest = UrlRequest.builder()
+                .serviceUrl(ServiceUrl.MEMBER_MODULE)
+                .path("/api/members/" + findBoard.getMemberId() + "/board")
+                .headers(headers)
+                .build();
+
+        MemberInfoResponse findMember = restClientUtil.getMono(urlRequest, MemberInfoResponse.class);
+
+        return BoardResponse.builder()
+                .boardTitle(findBoard.getTitle())
+                .boardContent(findBoard.getContent())
+                .nickname(findMember.getNickname())
+                .build();
     }
 
     // 게시글 전체 조회
@@ -47,27 +65,26 @@ public class BoardService {
 
         List<Long> memberIdList = boardList.stream()
                 .map(Board::getMemberId)
+                .distinct()
                 .toList();
 
-        List<MemberInfoResponse> memberList = memberRestClient.get()
-                .uri(uriBuilder -> {
-                    return uriBuilder.path("/api/members/idList")
-                            .queryParam("memberIdList", memberIdList)
-                            .build();
-                })
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccessToken())
-                .exchange((clientRequest, clientResponse) -> {
-                    if (!clientResponse.getStatusCode().equals(HttpStatus.OK)) {
-                        throw new InternalServerErrorException("Member 정보 호출 API 실패");
-                    }
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("memberIdList", memberIdList);
 
-                    return clientResponse.bodyTo(new ParameterizedTypeReference<>() {
-                    });
-                });
+        Map<String, String> headers = new HashMap<>();
+        headers.put(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccessToken());
+
+        UrlRequest urlRequest = UrlRequest.builder()
+                .serviceUrl(ServiceUrl.MEMBER_MODULE)
+                .path("/api/members/idList")
+                .queryParams(queryParams)
+                .headers(headers)
+                .build();
+
+        List<MemberInfoResponse> memberList = restClientUtil.getFlux(urlRequest, MemberInfoResponse.class);
 
         return boardList.stream()
                 .map(board -> {
-                    assert memberList != null;
                     String nickname = memberList.stream()
                             .filter(member -> member.getMemberId().equals(board.getMemberId()))
                             .findFirst()
