@@ -4,7 +4,7 @@ import com.example.domain.Board;
 import com.example.dto.request.BoardSaveRequest;
 import com.example.dto.response.BoardResponse;
 import com.example.dto.response.MemberInfoResponse;
-import com.example.enumeration.ServiceUrl;
+import com.example.enumeration.ModuleInfo;
 import com.example.jwt.TokenInfo;
 import com.example.repository.BoardRepository;
 import com.example.util.RestClientUtil;
@@ -44,7 +44,7 @@ public class BoardService {
         headers.put(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccessToken());
 
         UrlRequest urlRequest = UrlRequest.builder()
-                .serviceUrl(ServiceUrl.MEMBER_MODULE)
+                .moduleInfo(ModuleInfo.MEMBER_MODULE)
                 .path("/api/members/" + findBoard.getMemberId() + "/board")
                 .headers(headers)
                 .build();
@@ -75,7 +75,7 @@ public class BoardService {
         headers.put(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccessToken());
 
         UrlRequest urlRequest = UrlRequest.builder()
-                .serviceUrl(ServiceUrl.MEMBER_MODULE)
+                .moduleInfo(ModuleInfo.MEMBER_MODULE)
                 .path("/api/members/idList")
                 .queryParams(queryParams)
                 .headers(headers)

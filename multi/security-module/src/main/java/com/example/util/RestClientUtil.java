@@ -1,29 +1,24 @@
 package com.example.util;
 
-import com.example.enumeration.ServiceUrl;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
 public class RestClientUtil {
 
-    private final RestClient restClient;
+    private final RestClient.Builder restClientBuilder;
 
     public <T> T getMono(UrlRequest urlRequest,
                          Class<T> responseClass) {
 
-        RestClient client = restClient.mutate()
-                .baseUrl(urlRequest.getServiceUrl().getBaseUrl())
+        RestClient client = restClientBuilder
+                .baseUrl(urlRequest.getModuleInfo().getBaseUrl())
                 .build();
 
         return client.get()
@@ -52,7 +47,7 @@ public class RestClientUtil {
                 })
                 .exchange((request, response) -> {
                     if(!response.getStatusCode().isSameCodeAs(HttpStatus.OK)) {
-                        throw new RuntimeException(urlRequest.getServiceUrl().getBaseUrl() + urlRequest.getPath() +"에 대한 요청에 실패했습니다");
+                        throw new RuntimeException(urlRequest.getModuleInfo().getBaseUrl() + urlRequest.getPath() +"에 대한 요청에 실패했습니다");
                     }
 
                     return response.bodyTo(responseClass);
@@ -62,8 +57,9 @@ public class RestClientUtil {
     public <T> List<T> getFlux(UrlRequest urlRequest,
                                Class<T> responseClass) {
 
-        RestClient client = restClient.mutate()
-                .baseUrl(urlRequest.getServiceUrl().getBaseUrl())
+
+        RestClient client = restClientBuilder
+                .baseUrl(urlRequest.getModuleInfo().getBaseUrl())
                 .build();
 
         return client.get()
@@ -91,7 +87,7 @@ public class RestClientUtil {
                 })
                 .exchange((request, response) -> {
                     if(!response.getStatusCode().isSameCodeAs(HttpStatus.OK)) {
-                        throw new RuntimeException(urlRequest.getServiceUrl().getBaseUrl() + urlRequest.getPath() +"에 대한 요청에 실패했습니다");
+                        throw new RuntimeException(urlRequest.getModuleInfo().getBaseUrl() + urlRequest.getPath() +"에 대한 요청에 실패했습니다");
                     }
 
                     ObjectMapper objectMapper = new ObjectMapper();
